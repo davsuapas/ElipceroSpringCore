@@ -1,0 +1,94 @@
+buildscript {
+    ext {
+        springBootVersion = '1.4.2.RELEASE'
+        assertjVersion = '3.6.1'
+        catchexceptionVersion = '1.4.4'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+    }
+}
+
+subprojects {
+	
+	apply plugin: 'java'
+	apply plugin: 'eclipse'
+	apply plugin: 'spring-boot'
+	apply plugin: "jacoco" 
+	apply plugin: 'maven-publish'
+
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+	
+	repositories {
+	    mavenCentral()
+	}
+	
+	configurations {
+	    providedRuntuildime
+	}
+	
+	// Integracion test 
+	
+	sourceSets {
+	    integrationTest {
+	        java {
+	        	srcDir 'src/integrationtest/java'
+	        }
+	    }
+	}
+	
+	dependencies {
+		integrationTestCompile sourceSets.main.output
+		integrationTestCompile sourceSets.test.output
+		integrationTestCompile configurations.testCompile
+		integrationTestRuntime configurations.testRuntime
+	}
+	
+	task integrationTest(type: Test) {
+	    testClassesDir = sourceSets.integrationTest.output.classesDir
+	    classpath = sourceSets.integrationTest.runtimeClasspath
+	}
+	
+	check.dependsOn integrationTest
+	
+	// FIN Integration test 
+	
+	// Publish maven local
+	
+	publishing {
+	    publications {
+	        mavenJava(MavenPublication) {
+	        
+	            artifactId jar.baseName
+	            version jar.version
+	            
+	            from components.java
+	            
+		        pom.withXml { 
+	                def parentNode = asNode().appendNode('parent') 
+	                parentNode.appendNode('groupId','org.springframework.boot') 
+	                parentNode.appendNode('artifactId','spring-boot-starter-parent') 
+	                parentNode.appendNode('version',"$springBootVersion") 
+	            } 
+	        }
+	    }
+	}	
+		
+	// FIN Publish maven local
+	
+	dependencies {
+	    compileOnly('org.projectlombok:lombok')
+	    
+	    testCompile("org.springframework.boot:spring-boot-starter-test")
+	    testCompile("org.assertj:assertj-core:${assertjVersion}")
+	    testCompile("eu.codearte.catch-exception:catch-exception:${catchexceptionVersion}")
+	}
+	
+	task wrapper(type: Wrapper) {
+	    gradleVersion = '3.2.1'
+	}
+}
