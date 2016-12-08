@@ -4,6 +4,7 @@ jar {
 }
 
 dependencies {
+	compile('org.springframework.data:spring-data-mongodb')
     compile('org.springframework.security.oauth:spring-security-oauth2')
 }
 
