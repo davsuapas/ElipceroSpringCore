@@ -17,7 +17,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.web.filter.CompositeFilter;
 
 /**
- * Configure filters for OAuth2 sso and provide method to configure OAuth2 rest template
+ * Configure filters OAuth2 client in a web application that uses Spring Security and wants 
+ * to use the Authorization Code Grant from one or more OAuth2 Authorization servers
  * The filter is configured in priority order. Order => -100 
  * 
  * @author David Suárez Pascual
