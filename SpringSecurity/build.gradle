@@ -4,8 +4,10 @@ jar {
 }
 
 dependencies {
+	compile('org.springframework.boot:spring-boot-autoconfigure')
 	compile('org.springframework.data:spring-data-mongodb')
     compile('org.springframework.security.oauth:spring-security-oauth2')
+    compile('javax.servlet:javax.servlet-api')
 }
 
 // Publish maven local
