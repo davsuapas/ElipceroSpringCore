@@ -1,0 +1,20 @@
+jar {
+    baseName = 'elipcero-springdata'
+    version = '0.1.0'
+}
+
+dependencies {
+    compile "org.springframework.data:spring-data-mongodb"
+  
+    testCompile "org.springframework.boot:spring-boot-starter-data-mongodb"        
+}
+
+// Publish maven local
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId 'com.elipcero.springdata'
+        }
+    }
+}
