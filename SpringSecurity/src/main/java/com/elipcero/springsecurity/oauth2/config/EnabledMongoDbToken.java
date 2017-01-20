@@ -10,15 +10,23 @@ import java.lang.annotation.Target;
 /**
  * Allow use MongoDBTokenStore. @see MongoDBTokenStore
  * 
+ * <p>
  * Example:
  * 
- * @Bean 
- * public AuthorizationServerTokenServices tokenServices() {
- *	    DefaultTokenServices tokenServices = new DefaultTokenServices();
- *	    
- *	    tokenServices.setTokenStore(mongoTokenStore());
- *	    return tokenServices;
- *	}
+ * @Configuration
+ * @EnabledMongoDbToken
+ * @EnableAuthorizationServer
+ * public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
+ *	
+ *	@Autowired
+ *	private AuthenticationManager authenticationManager;
+ *
+ *	// Inject MongoDbTokenStore by @EnabledMongoDbToken 
+ *	@Autowired
+ *	private TokenStore tokenStore;
+ *
+ * }
+ * <p>
  * 
  * @author David Suárez Pascual
  */

@@ -21,6 +21,37 @@ import org.springframework.web.filter.CompositeFilter;
  * to use the Authorization Code Grant from one or more OAuth2 Authorization servers
  * The filter is configured in priority order. Order => -100 
  * 
+ * Example:
+ * 
+ * <p>
+ * @Configuration
+ * public class WebSecurityConfiguration extends OAuth2SsoConfigurerAdapter {
+ *	
+ *	@Override
+ *	protected void configure(HttpSecurity http) throws Exception {
+ *		http.antMatcher("/**").authorizeRequests().antMatchers("/", "/login**", "/webjars/**").permitAll()
+ *				.anyRequest()
+ *				.authenticated().and().exceptionHandling()
+ *				.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/")).and()
+ *				.addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
+ *	}
+ *
+ *	private Filter ssoFilter() {
+ *		return ssoFilter(
+ *				Arrays.asList(
+ *						ssoFilter(github(), "/login/google")
+ *				)
+ *		);
+ *	}
+ *	
+ *	@Bean
+ *	@ConfigurationProperties("google")
+ *	OAuth2ClientResources github() {
+ *		return new OAuth2ClientResources();
+ *	}
+ * }
+ * <p>
+ * 
  * @author David Suárez Pascual
  */
 
