@@ -3,17 +3,17 @@ package com.elipcero.springdata.integrationtest.repositories.mongo;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.util.Objects;
 
-public class TestMongoEmbeddedEntityAssert extends AbstractAssert<TestMongoEmbeddedEntityAssert, TestMongoEmbeddedEntity> {
+public class TestMongoExtensionEntityAssert extends AbstractAssert<TestMongoExtensionEntityAssert, TestMongoExtensionEntity> {
 
-	private TestMongoEmbeddedEntityAssert(TestMongoEmbeddedEntity actual) {
-		super(actual, TestMongoEmbeddedEntityAssert.class);
+	private TestMongoExtensionEntityAssert(TestMongoExtensionEntity actual) {
+		super(actual, TestMongoExtensionEntityAssert.class);
 	}
     
-	public static TestMongoEmbeddedEntityAssert assertThat(TestMongoEmbeddedEntity actual) {
-		return new TestMongoEmbeddedEntityAssert(actual);
+	public static TestMongoExtensionEntityAssert assertThat(TestMongoExtensionEntity actual) {
+		return new TestMongoExtensionEntityAssert(actual);
     }
 
-    public TestMongoEmbeddedEntityAssert hasName(String name) {
+    public TestMongoExtensionEntityAssert hasName(String name) {
     	
     	// check that actual AquariumEntity we want to make assertions on is not null.
         isNotNull();

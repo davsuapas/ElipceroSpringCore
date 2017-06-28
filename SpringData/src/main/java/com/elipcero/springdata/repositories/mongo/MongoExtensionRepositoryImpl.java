@@ -19,15 +19,15 @@ import org.springframework.data.mongodb.repository.support.SimpleMongoRepository
  * The class for sharing behavior in mongodb.
  *
  */
-public class MongoEmbeddedRepositoryImpl<T, ID extends Serializable>
-	extends SimpleMongoRepository<T, ID> implements MongoEmbeddedRepository<T, ID> {
+public class MongoExtensionRepositoryImpl<T, ID extends Serializable>
+	extends SimpleMongoRepository<T, ID> implements MongoExtensionRepository<T, ID> {
 	
 	private final MongoEntityInformation<T, ID> entityInformation;
 	private final MongoOperations mongoOperations;
 	
 	private final MetadataMongoFactory metadata;
 
-	public MongoEmbeddedRepositoryImpl(MongoEntityInformation<T, ID> entityInformation, MongoOperations mongoOperations) {
+	public MongoExtensionRepositoryImpl(MongoEntityInformation<T, ID> entityInformation, MongoOperations mongoOperations) {
 	    super(entityInformation, mongoOperations);
 	    
 	    this.entityInformation = entityInformation;
@@ -76,7 +76,7 @@ public class MongoEmbeddedRepositoryImpl<T, ID extends Serializable>
 		MongoPersistentProperty embeddedPropertyEntityId = this.metadata.getMongoPersistentEntity(embeddedRelationType).getIdProperty();
 		
 		if (embeddedPropertyEntityId == null) {
-			throw new MongoEmbeddedPropertyIdNotFoundException();
+			throw new MongoExtensionPropertyIdNotFoundException();
 		}
 		
 		return new MetadataEmbddedRelation(propertyEmbedded, embeddedPropertyEntityId);

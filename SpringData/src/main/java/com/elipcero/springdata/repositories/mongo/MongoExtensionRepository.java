@@ -14,13 +14,13 @@ import org.springframework.data.repository.NoRepositoryBean;
  */
 
 @NoRepositoryBean
-public interface MongoEmbeddedRepository<T, ID extends Serializable> extends MongoRepository<T, ID> {
+public interface MongoExtensionRepository<T, ID extends Serializable> extends MongoRepository<T, ID> {
   
   /**
    * Merge the items of the relation embedded. 
    * It is required that the items of relation embedded must have unique identifier (objectId)
    * The unique identifier must marked with @Id 
-   * If the items exist then update item and the items don't exist then add item 
+   * If the items exist then update item and the items doesen't exist then add item 
    *
    * @param entity the main entity where is the embedded relation
    * @param propertyPath the relation embedded property name. This property must return a list

@@ -4,7 +4,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-public class TestMongoEmbeddedEntity {
+public class TestMongoExtensionEntity {
 	
 	public static final String TESTMONGO_EMBEDDEDID = ObjectId.get().toString();	
 
@@ -28,7 +28,7 @@ public class TestMongoEmbeddedEntity {
 	
 	public static class Builder {
 		
-		private final TestMongoEmbeddedEntity testMongoEmbeddedEntity = new TestMongoEmbeddedEntity();
+		private final TestMongoExtensionEntity testMongoEmbeddedEntity = new TestMongoExtensionEntity();
 		
 		private TestMongoEntity.Builder parent;
 		
@@ -51,7 +51,7 @@ public class TestMongoEmbeddedEntity {
 			return this;
 		}		
 		
-		public TestMongoEmbeddedEntity build() {
+		public TestMongoExtensionEntity build() {
 			return this.testMongoEmbeddedEntity;
 		}			
 	}

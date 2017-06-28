@@ -22,9 +22,9 @@ public class TestMongoEntity {
 	private String name;
 	
 	@Field("ebde")
-	private List<TestMongoEmbeddedEntity> embeddedEntities = new ArrayList<TestMongoEmbeddedEntity>();
+	private List<TestMongoExtensionEntity> embeddedEntities = new ArrayList<TestMongoExtensionEntity>();
 	
-	public List<TestMongoEmbeddedEntity> getEmbeddedEntities() {
+	public List<TestMongoExtensionEntity> getEmbeddedEntities() {
 		return embeddedEntities;
 	}
 
@@ -54,8 +54,8 @@ public class TestMongoEntity {
 			return this;
 		}		
 		
-		public TestMongoEmbeddedEntity.Builder addEmbedded() {
-			TestMongoEmbeddedEntity.Builder buildEmbedded =	TestMongoEmbeddedEntity.getBuilder().setParent(this);
+		public TestMongoExtensionEntity.Builder addEmbedded() {
+			TestMongoExtensionEntity.Builder buildEmbedded =	TestMongoExtensionEntity.getBuilder().setParent(this);
 			this.testMongoEntity.embeddedEntities.add(buildEmbedded.build());
 			return buildEmbedded;
 		}				

@@ -12,28 +12,28 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.elipcero.springdata.integrationtest.configuration.mongo.MongoDataConfiguration;
 
-import static com.elipcero.springdata.integrationtest.repositories.mongo.TestMongoEmbeddedEntityAssert.assertThat;
+import static com.elipcero.springdata.integrationtest.repositories.mongo.TestMongoExtensionEntityAssert.assertThat;
 
 @SuppressWarnings("deprecation")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = MongoDataConfiguration.class, loader = SpringApplicationContextLoader.class)
-public class MongoEmbeddedRepositoryImplIntegrationTest {
+public class MongoExtensionRepositoryImplIntegrationTest {
 	
 	private static final String TESTMONGO_NAME_ONE = "nameEmbedded1";
 	private static final String TESTMONGO_NAME_TWO = "nameEmbedded2";
 	
 	@Autowired
-	private TestMongoEmbeddedRepository testMongoExtendedRepository;
+	private TestMongoExtensionRepository testMongoExtendedRepository;
 	
 	@Test
 	public void mergeEmbeddedRelation_UpdateOneItemInEmbeddedRelation_ShouldReturnVoid() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
 		TestMongoEntity testMongoEntity = 
-				TestMongoEntity.CreateTestMongoEntity(TestMongoEmbeddedEntity.TESTMONGO_EMBEDDEDID, TESTMONGO_NAME_TWO);
+				TestMongoEntity.CreateTestMongoEntity(TestMongoExtensionEntity.TESTMONGO_EMBEDDEDID, TESTMONGO_NAME_TWO);
 		
 		this.createSample();
 				
-		this.testMongoExtendedRepository.mergeEmbeddedRelation(testMongoEntity, "embeddedEntities", TestMongoEmbeddedEntity.class);
+		this.testMongoExtendedRepository.mergeEmbeddedRelation(testMongoEntity, "embeddedEntities", TestMongoExtensionEntity.class);
 	
 		testMongoEntity = this.testMongoExtendedRepository.findOne(TestMongoEntity.TESTMONGO_ID);
 		
@@ -52,7 +52,7 @@ public class MongoEmbeddedRepositoryImplIntegrationTest {
 		
 		this.createSample();
 				
-		this.testMongoExtendedRepository.mergeEmbeddedRelation(testMongoEntity, "embeddedEntities", TestMongoEmbeddedEntity.class);
+		this.testMongoExtendedRepository.mergeEmbeddedRelation(testMongoEntity, "embeddedEntities", TestMongoExtensionEntity.class);
 		
 		testMongoEntity = this.testMongoExtendedRepository.findOne(TestMongoEntity.TESTMONGO_ID);
 		
@@ -64,7 +64,7 @@ public class MongoEmbeddedRepositoryImplIntegrationTest {
 	
 	private void createSample() {
 		this.testMongoExtendedRepository.save(
-				TestMongoEntity.CreateTestMongoEntity(TestMongoEmbeddedEntity.TESTMONGO_EMBEDDEDID, TESTMONGO_NAME_ONE)
+				TestMongoEntity.CreateTestMongoEntity(TestMongoExtensionEntity.TESTMONGO_EMBEDDEDID, TESTMONGO_NAME_ONE)
 		);
 	}
 	

@@ -37,7 +37,7 @@ public class MongoExtendedFactoryBean<R extends MongoRepository<T, I>, T, I exte
 		protected Object getTargetRepository(RepositoryInformation metadata) {
 			
 			if (isEmbeddedRepository(metadata.getRepositoryInterface())) {
-			    return new MongoEmbeddedRepositoryImpl<T, ID>(
+			    return new MongoExtensionRepositoryImpl<T, ID>(
 			    		MetadataMongoFactory.Build(mongoOperations).getEntityInformation(metadata.getDomainType()),
 			    		mongoOperations
 			    );
@@ -50,7 +50,7 @@ public class MongoExtendedFactoryBean<R extends MongoRepository<T, I>, T, I exte
 		protected Class<?> getRepositoryBaseClass(RepositoryMetadata metadata) {
 			
 			if (isEmbeddedRepository(metadata.getRepositoryInterface())) {
-				return MongoEmbeddedRepository.class;
+				return MongoExtensionRepository.class;
 			}
 			else {
 				return super.getRepositoryBaseClass(metadata);
@@ -58,7 +58,7 @@ public class MongoExtendedFactoryBean<R extends MongoRepository<T, I>, T, I exte
 		}
 		
 		private static boolean isEmbeddedRepository(Class<?> repositoryInterface) {
-			return MongoEmbeddedRepository.class.isAssignableFrom(repositoryInterface);
+			return MongoExtensionRepository.class.isAssignableFrom(repositoryInterface);
 		}
 	}
 }
