@@ -1,7 +1,6 @@
 package com.elipcero.springdata.repositories.mongo;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -26,7 +25,7 @@ public interface MongoExtensionRepository<T, ID extends Serializable> extends Mo
    * @param propertyPath the relation embedded property name. This property must return a list
    * @param embeddedRelationType the embedded property type.
    */
-	<TEmbedded> void mergeEmbeddedRelation(T entity, String propertyPath, Class<TEmbedded> embeddedRelationType) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
+	<TEmbedded> void mergeEmbeddedRelation(T entity, String propertyPath, Class<TEmbedded> embeddedRelationType);
 	
   /**
    * Update the properties not nulls of the entity.

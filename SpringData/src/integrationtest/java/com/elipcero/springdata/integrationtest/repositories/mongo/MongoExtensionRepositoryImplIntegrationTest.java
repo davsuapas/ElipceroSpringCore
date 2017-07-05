@@ -47,7 +47,7 @@ public class MongoExtensionRepositoryImplIntegrationTest {
 	}
 	
 	@Test
-	public void mongoExtension_UpdateOneItemInEmbeddedRelation_ShouldReturnVoid() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public void mongoExtension_UpdateOneItemInEmbeddedRelation_ShouldReturnVoid() {
 		
 		TestMongoEntity testMongoEntity = 
 				TestMongoEntity.CreateTestMongoEntity(TestMongoExtensionEntity.TESTMONGO_EMBEDDEDID, TESTMONGO_NAME_TWO);
@@ -65,7 +65,7 @@ public class MongoExtensionRepositoryImplIntegrationTest {
 	}
 	
 	@Test
-	public void mongoExtension_InsertOneItemInEmbeddedRelation_ShouldReturnVoid() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public void mongoExtension_InsertOneItemInEmbeddedRelation_ShouldReturnVoid() {
 		
 		String addId = ObjectId.get().toString();
 		
