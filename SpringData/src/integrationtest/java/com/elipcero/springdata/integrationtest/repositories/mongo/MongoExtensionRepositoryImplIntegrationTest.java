@@ -1,7 +1,5 @@
 package com.elipcero.springdata.integrationtest.repositories.mongo;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.junit.runner.RunWith;
