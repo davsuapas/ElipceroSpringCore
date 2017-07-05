@@ -2,6 +2,7 @@ package com.elipcero.springdata.repositories.mongo;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 
 import static org.springframework.data.mongodb.core.query.Criteria.*;
 
@@ -27,6 +28,12 @@ public class MongoExtensionRepositoryImpl<T, ID extends Serializable>
 	
 	private final MetadataMongoFactory metadata;
 
+	/**
+	 * Instantiates a new mongo extension repository impl.
+	 *
+	 * @param entityInformation the entity information
+	 * @param mongoOperations the mongo operations
+	 */
 	public MongoExtensionRepositoryImpl(MongoEntityInformation<T, ID> entityInformation, MongoOperations mongoOperations) {
 	    super(entityInformation, mongoOperations);
 	    
@@ -39,7 +46,7 @@ public class MongoExtensionRepositoryImpl<T, ID extends Serializable>
 	/* (non-Javadoc)
 	 * @see com.elipcero.springdata.repositories.mongo.MongoAllSharedRepository#mergeEmbeddedRelation(java.io.Serializable)
 	 */
-	public <TEmbedded> void mergeEmbeddedRelation(T entity, String propertyPath, Class<TEmbedded> embeddedRelationType) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public <TEmbedded> void mergeEmbeddedRelation(T entity, String propertyPath, Class<TEmbedded> embeddedRelationType) {
 		
 		MongoPersistentProperty propertyEmbedded =
 				this.metadata.getMappingContext().getPersistentPropertyPath(
@@ -72,6 +79,42 @@ public class MongoExtensionRepositoryImpl<T, ID extends Serializable>
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.elipcero.springdata.repositories.mongo.MongoExtensionRepository#updateNoNulls(java.lang.Object)
+	 */
+	public Boolean updateNoNulls(T entity) {
+		
+		Update update = new Update();
+		
+		ConversionService converts = mongoOperations.getConverter().getConversionService();
+		
+		UpdateAnyField updateAnyField = new UpdateAnyField(); // it's used UpdateAnyField because local variable cannot be used in closed method
+	
+		this.metadata.getMongoPersistentEntity(this.entityInformation.getJavaType()).doWithProperties(
+			(MongoPersistentProperty prop) -> {
+				if (prop.getType() == Optional.class) {
+					try {
+						Optional<?> value = (Optional<?>)prop.getGetter().invoke(entity);
+						if (value != null && value.isPresent()) {
+							update.set(prop.getFieldName(), converts.convert(value, prop.getType()));
+							updateAnyField.setValue(true);
+						}
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						throw new MongoExtensionReflectionError();
+					}
+				}
+			}
+		);
+
+		if (updateAnyField.isUpdated())
+			return this.mongoOperations.updateFirst(
+					new Query(where(this.entityInformation.getIdAttribute()).is(this.entityInformation.getId(entity))),
+					update,
+					this.entityInformation.getJavaType()).isUpdateOfExisting();
+		else 
+			return false;
+	}
+		
 	private MetadataEmbddedRelation BuildMetadataEmbddedRelation(MongoPersistentProperty propertyEmbedded, Class<?> embeddedRelationType) {
 		MongoPersistentProperty embeddedPropertyEntityId = this.metadata.getMongoPersistentEntity(embeddedRelationType).getIdProperty();
 		
@@ -104,16 +147,41 @@ public class MongoExtensionRepositoryImpl<T, ID extends Serializable>
 			return this.getEmbeddedPropertyFieldName() + "." + this.embeddedPropertyEntityId.getFieldName();
 		}
 		
-		public ObjectId getEmbeddedIdValue(Object embeddedEntity) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
-			return this.converter.convert(this.embeddedPropertyEntityId.getGetter().invoke(embeddedEntity), ObjectId.class);
+		public ObjectId getEmbeddedIdValue(Object embeddedEntity) {
+			try {
+				return this.converter.convert(this.embeddedPropertyEntityId.getGetter().invoke(embeddedEntity), ObjectId.class);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				throw new MongoExtensionReflectionError();
+			}
 		}
 		
-		public Iterable<?> getEmbeddedPropertyValue(Object entity) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-			return (Iterable<?>)this.embeddedProperty.getGetter().invoke(entity);
+		public Iterable<?> getEmbeddedPropertyValue(Object entity) {
+			try {
+				return (Iterable<?>)this.embeddedProperty.getGetter().invoke(entity);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				throw new MongoExtensionReflectionError();
+			}
 		}
 
 		public String getEmbeddedPropertyFieldName() {
 			return this.embeddedProperty.getFieldName();
+		}
+	}
+	
+	private class UpdateAnyField {
+		
+		public UpdateAnyField() {
+			this.value = false;
+		}
+		
+		private Boolean value;
+		
+		public Boolean isUpdated() {
+			return this.value;
+		}
+		
+		public void setValue(Boolean value) {
+			this.value = value;
 		}
 	}
 }

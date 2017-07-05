@@ -6,17 +6,17 @@ import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationContextLoader;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.elipcero.springdata.integrationtest.configuration.mongo.MongoDataConfiguration;
 
+import org.assertj.core.api.Assertions;
+
 import static com.elipcero.springdata.integrationtest.repositories.mongo.TestMongoExtensionEntityAssert.assertThat;
 
-@SuppressWarnings("deprecation")
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = MongoDataConfiguration.class, loader = SpringApplicationContextLoader.class)
+@SpringBootTest(classes = MongoDataConfiguration.class)
 public class MongoExtensionRepositoryImplIntegrationTest {
 	
 	private static final String TESTMONGO_NAME_ONE = "nameEmbedded1";
@@ -26,7 +26,28 @@ public class MongoExtensionRepositoryImplIntegrationTest {
 	private TestMongoExtensionRepository testMongoExtendedRepository;
 	
 	@Test
-	public void mergeEmbeddedRelation_UpdateOneItemInEmbeddedRelation_ShouldReturnVoid() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public void mongoExtension_UpdateNoNulls_ShouldReturnVoid() {
+		
+		TestMongoEntity testMongoEntity = 
+			TestMongoEntity.CreateTestMongoEntityWithNull();
+		
+		this.testMongoExtendedRepository.save(
+			TestMongoEntity.CreateTestMongoEntity()
+		);
+				
+		Boolean updaed = this.testMongoExtendedRepository.updateNoNulls(testMongoEntity);
+	
+		testMongoEntity = this.testMongoExtendedRepository.findOne(TestMongoEntity.TESTMONGO_ID);
+		
+		Assertions.assertThat(updaed).isTrue();
+		Assertions.assertThat(testMongoEntity.getName().get()).isEqualTo("name1");
+		Assertions.assertThat(testMongoEntity.getNumber().get()).isEqualTo(3);
+		
+		this.deleteSample();
+	}
+	
+	@Test
+	public void mongoExtension_UpdateOneItemInEmbeddedRelation_ShouldReturnVoid() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
 		TestMongoEntity testMongoEntity = 
 				TestMongoEntity.CreateTestMongoEntity(TestMongoExtensionEntity.TESTMONGO_EMBEDDEDID, TESTMONGO_NAME_TWO);
@@ -44,7 +65,7 @@ public class MongoExtensionRepositoryImplIntegrationTest {
 	}
 	
 	@Test
-	public void mergeEmbeddedRelation_InsertOneItemInEmbeddedRelation_ShouldReturnVoid() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public void mongoExtension_InsertOneItemInEmbeddedRelation_ShouldReturnVoid() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
 		String addId = ObjectId.get().toString();
 		

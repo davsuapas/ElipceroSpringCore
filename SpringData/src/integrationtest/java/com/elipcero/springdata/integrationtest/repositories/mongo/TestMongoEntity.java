@@ -2,6 +2,7 @@ package com.elipcero.springdata.integrationtest.repositories.mongo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -18,8 +19,9 @@ public class TestMongoEntity {
 	@Id
 	private String id;
 	
-	@Field("n")
-	private String name;
+	private Optional<String> name;
+	
+	private Optional<Integer> number;
 	
 	@Field("ebde")
 	private List<TestMongoExtensionEntity> embeddedEntities = new ArrayList<TestMongoExtensionEntity>();
@@ -32,10 +34,14 @@ public class TestMongoEntity {
 		return id;
 	}
 
-	public String getName() {
+	public Optional<String> getName() {
 		return name;
 	}
 
+	public Optional<Integer> getNumber() {
+		return number;
+	}
+	
 	public static Builder getBuilder() {
         return new Builder();
     }	
@@ -49,11 +55,16 @@ public class TestMongoEntity {
 			return this;
 		}
 		
-		public Builder withName(String value) {
+		public Builder withName(Optional<String> value) {
 			this.testMongoEntity.name = value;
 			return this;
 		}		
-		
+
+		public Builder withNumber(Optional<Integer> value) {
+			this.testMongoEntity.number = value;
+			return this;
+		}		
+
 		public TestMongoExtensionEntity.Builder addEmbedded() {
 			TestMongoExtensionEntity.Builder buildEmbedded =	TestMongoExtensionEntity.getBuilder().setParent(this);
 			this.testMongoEntity.embeddedEntities.add(buildEmbedded.build());
@@ -69,11 +80,31 @@ public class TestMongoEntity {
 		
 		return TestMongoEntity.getBuilder()
 					.withId(TestMongoEntity.TESTMONGO_ID)
-					.withName("name")
+					.withName(Optional.of("name"))
+					.withNumber(Optional.of(3))
 					.addEmbedded()
 						.withId(embeddedId)
 						.withName(name)
 						.parent()
 					.build();
 	}
+	
+	public static TestMongoEntity CreateTestMongoEntity() {
+		
+		return TestMongoEntity.getBuilder()
+					.withId(TestMongoEntity.TESTMONGO_ID)
+					.withName(Optional.of("name"))
+					.withNumber(Optional.of(3))
+					.build();
+	}
+
+	public static TestMongoEntity CreateTestMongoEntityWithNull() {
+		
+		return TestMongoEntity.getBuilder()
+					.withId(TestMongoEntity.TESTMONGO_ID)
+					.withName(Optional.of("name1"))
+					.withNumber(Optional.empty())
+					.build();
+	}
+
 }

@@ -27,5 +27,13 @@ public interface MongoExtensionRepository<T, ID extends Serializable> extends Mo
    * @param embeddedRelationType the embedded property type.
    */
 	<TEmbedded> void mergeEmbeddedRelation(T entity, String propertyPath, Class<TEmbedded> embeddedRelationType) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
+	
+  /**
+   * Update the properties not nulls of the entity.
+   * The properties for researching must return an optional type
+   *
+   * @param entity for updating
+   */
+	Boolean updateNoNulls(T entity);
 }
 
