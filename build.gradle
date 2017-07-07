@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        springBootVersion = '1.4.2.RELEASE'
-        assertjVersion = '3.6.1'
+        springBootVersion = '1.5.4.RELEASE'
+        assertjVersion = '3.8.0'
         catchexceptionVersion = '1.4.4'
     }
     repositories {
