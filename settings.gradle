@@ -1,2 +1,4 @@
 include "SpringSecurity"
 include "SpringData"
+include "SpringDataRest"
+include "SpringCore"

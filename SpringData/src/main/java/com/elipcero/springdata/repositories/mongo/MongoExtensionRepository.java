@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
+import com.elipcero.springdata.repositories.base.ExtensionRepository;
+
 /**
  * @author dsuarez
  * 
@@ -13,7 +15,7 @@ import org.springframework.data.repository.NoRepositoryBean;
  */
 
 @NoRepositoryBean
-public interface MongoExtensionRepository<T, ID extends Serializable> extends MongoRepository<T, ID> {
+public interface MongoExtensionRepository<T, ID extends Serializable> extends MongoRepository<T, ID>, ExtensionRepository<T> {
   
   /**
    * Merge the items of the relation embedded. 
@@ -26,13 +28,5 @@ public interface MongoExtensionRepository<T, ID extends Serializable> extends Mo
    * @param embeddedRelationType the embedded property type.
    */
 	<TEmbedded> void mergeEmbeddedRelation(T entity, String propertyPath, Class<TEmbedded> embeddedRelationType);
-	
-  /**
-   * Update the properties not nulls of the entity.
-   * The properties for researching must return an optional type
-   *
-   * @param entity for updating
-   */
-	Boolean updateNoNulls(T entity);
 }
 

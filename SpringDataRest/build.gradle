@@ -1,0 +1,24 @@
+jar {
+    baseName = 'elipcero-springdatarest'
+    version = '0.1.0'
+}
+
+dependencies {
+      compile('org.springframework.data:spring-data-rest-webmvc')
+      
+      compile project(':SpringData')
+      
+      testCompile("org.springframework.boot:spring-boot-starter-data-mongodb") 
+  	  testCompile('org.springframework.boot:spring-boot-starter-data-rest')
+  	  testCompile project(':SpringCore')
+}
+
+// Publish maven local
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId 'com.elipcero.springdatarest'
+        }
+    }
+}
