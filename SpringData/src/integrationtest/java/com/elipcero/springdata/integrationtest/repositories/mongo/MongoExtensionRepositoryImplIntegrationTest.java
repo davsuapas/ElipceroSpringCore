@@ -33,11 +33,11 @@ public class MongoExtensionRepositoryImplIntegrationTest {
 			TestMongoEntity.CreateTestMongoEntity()
 		);
 				
-		Boolean updaed = this.testMongoExtendedRepository.updateNoNulls(testMongoEntity);
+		TestMongoEntity updated = this.testMongoExtendedRepository.updateNoNulls(testMongoEntity);
 	
 		testMongoEntity = this.testMongoExtendedRepository.findOne(TestMongoEntity.TESTMONGO_ID);
 		
-		Assertions.assertThat(updaed).isTrue();
+		Assertions.assertThat(updated).isNotNull();
 		Assertions.assertThat(testMongoEntity.getName().get()).isEqualTo("name1");
 		Assertions.assertThat(testMongoEntity.getNumber().get()).isEqualTo(3);
 		

@@ -12,10 +12,22 @@ import org.springframework.data.rest.webmvc.config.RootResourceInformationHandle
 import com.elipcero.springdata.repositories.base.ExtensionRepository;
 import com.elipcero.springdata.repositories.base.RepositoryExtensionInvoker;
 
+/**
+ * Override postProcess to allow a new invoker for repository extension getting more features
+ * 
+ * @author dav.sua.pas@gmail.com
+ */
 public class ExtensionRootResourceInformationHandlerMethodArgumentResolver extends RootResourceInformationHandlerMethodArgumentResolver {
 	
 	private final Repositories repositories;
 
+	/**
+	 * Instantiates a new extension root resource information handler method argument resolver.
+	 *
+	 * @param repositories the repositories
+	 * @param invokerFactory the invoker factory
+	 * @param resourceMetadataResolver the resource metadata resolver
+	 */
 	public ExtensionRootResourceInformationHandlerMethodArgumentResolver(
 			Repositories repositories,
 			RepositoryInvokerFactory invokerFactory,
@@ -26,6 +38,9 @@ public class ExtensionRootResourceInformationHandlerMethodArgumentResolver exten
 		this.repositories = repositories;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.springframework.data.rest.webmvc.config.RootResourceInformationHandlerMethodArgumentResolver#postProcess(org.springframework.core.MethodParameter, org.springframework.data.repository.support.RepositoryInvoker, java.lang.Class, java.util.Map)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	protected RepositoryInvoker postProcess(MethodParameter parameter, RepositoryInvoker invoker, Class<?> domainType, Map<String, String[]> parameters) {

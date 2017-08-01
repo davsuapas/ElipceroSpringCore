@@ -14,5 +14,5 @@ public interface ExtensionRepository<T> {
 	   *
 	   * @param entity for updating
 	   */
-		Boolean updateNoNulls(T entity);
+		T updateNoNulls(T entity);
 }

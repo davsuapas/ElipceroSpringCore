@@ -82,7 +82,7 @@ public class MongoExtensionRepositoryImpl<T, ID extends Serializable>
 	/* (non-Javadoc)
 	 * @see com.elipcero.springdata.repositories.mongo.MongoExtensionRepository#updateNoNulls(java.lang.Object)
 	 */
-	public Boolean updateNoNulls(T entity) {
+	public T updateNoNulls(T entity) {
 		
 		Update update = new Update();
 		
@@ -106,13 +106,18 @@ public class MongoExtensionRepositoryImpl<T, ID extends Serializable>
 			}
 		);
 
-		if (updateAnyField.isUpdated())
-			return this.mongoOperations.updateFirst(
+		if (updateAnyField.isUpdated()) {
+			Boolean updated = this.mongoOperations.updateFirst(
 					new Query(where(this.entityInformation.getIdAttribute()).is(this.entityInformation.getId(entity))),
 					update,
 					this.entityInformation.getJavaType()).isUpdateOfExisting();
+			if (updated) 
+				return entity;
+			else 
+				return null;
+		}
 		else 
-			return false;
+			return null;
 	}
 		
 	private MetadataEmbddedRelation BuildMetadataEmbddedRelation(MongoPersistentProperty propertyEmbedded, Class<?> embeddedRelationType) {

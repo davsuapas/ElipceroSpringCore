@@ -4,7 +4,8 @@ jar {
 }
 
 dependencies {
-	compile ("com.fasterxml.jackson.core:jackson-databind:2.8.8")
+	compile ("com.fasterxml.jackson.core:jackson-databind")
+	compile ("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
 }
 
 // Publish maven local

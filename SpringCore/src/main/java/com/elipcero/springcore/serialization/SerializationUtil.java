@@ -1,6 +1,7 @@
 package com.elipcero.springcore.serialization;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
 public class SerializationUtil {
 	
@@ -12,6 +13,9 @@ public class SerializationUtil {
 	 */
 	public static String asJsonString(final Object obj) {
         try {
+        	ObjectMapper mapper = new ObjectMapper();
+        	mapper.registerModule(new Jdk8Module());
+        	
             return new ObjectMapper().writeValueAsString(obj);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
