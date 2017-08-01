@@ -52,7 +52,7 @@ public class MongoExtensionRepositoryImplIntegrationTest {
 		
 		this.createSample();
 				
-		this.testMongoExtendedRepository.mergeEmbeddedRelation(testMongoEntity, "embeddedEntities", TestMongoExtensionEntity.class);
+		this.testMongoExtendedRepository.mergeEmbeddedRelation(testMongoEntity, "embeddedEntities");
 	
 		testMongoEntity = this.testMongoExtendedRepository.findOne(TestMongoEntity.TESTMONGO_ID);
 		
@@ -71,7 +71,7 @@ public class MongoExtensionRepositoryImplIntegrationTest {
 		
 		this.createSample();
 				
-		this.testMongoExtendedRepository.mergeEmbeddedRelation(testMongoEntity, "embeddedEntities", TestMongoExtensionEntity.class);
+		this.testMongoExtendedRepository.mergeEmbeddedRelation(testMongoEntity, "embeddedEntities");
 		
 		testMongoEntity = this.testMongoExtendedRepository.findOne(TestMongoEntity.TESTMONGO_ID);
 		

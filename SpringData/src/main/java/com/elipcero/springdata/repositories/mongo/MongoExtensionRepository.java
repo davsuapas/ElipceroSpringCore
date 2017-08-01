@@ -27,6 +27,6 @@ public interface MongoExtensionRepository<T, ID extends Serializable> extends Mo
    * @param propertyPath the relation embedded property name. This property must return a list
    * @param embeddedRelationType the embedded property type.
    */
-	<TEmbedded> void mergeEmbeddedRelation(T entity, String propertyPath, Class<TEmbedded> embeddedRelationType);
+	<TEmbedded> void mergeEmbeddedRelation(T entity, String propertyPath);
 }
 

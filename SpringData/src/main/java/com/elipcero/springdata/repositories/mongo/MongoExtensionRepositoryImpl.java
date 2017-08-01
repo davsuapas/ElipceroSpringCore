@@ -46,13 +46,14 @@ public class MongoExtensionRepositoryImpl<T, ID extends Serializable>
 	/* (non-Javadoc)
 	 * @see com.elipcero.springdata.repositories.mongo.MongoAllSharedRepository#mergeEmbeddedRelation(java.io.Serializable)
 	 */
-	public <TEmbedded> void mergeEmbeddedRelation(T entity, String propertyPath, Class<TEmbedded> embeddedRelationType) {
+	public <TEmbedded> void mergeEmbeddedRelation(T entity, String propertyPath) {
 		
 		MongoPersistentProperty propertyEmbedded =
 				this.metadata.getMappingContext().getPersistentPropertyPath(
 						propertyPath, this.entityInformation.getJavaType()).getBaseProperty();
+		
 					
-		MetadataEmbddedRelation metadataEmbedded = this.BuildMetadataEmbddedRelation(propertyEmbedded, embeddedRelationType);
+		MetadataEmbddedRelation metadataEmbedded = this.BuildMetadataEmbddedRelation(propertyEmbedded);
 		
 		ID mainEntityId = this.entityInformation.getId(entity);
 		
@@ -120,8 +121,8 @@ public class MongoExtensionRepositoryImpl<T, ID extends Serializable>
 			return null;
 	}
 		
-	private MetadataEmbddedRelation BuildMetadataEmbddedRelation(MongoPersistentProperty propertyEmbedded, Class<?> embeddedRelationType) {
-		MongoPersistentProperty embeddedPropertyEntityId = this.metadata.getMongoPersistentEntity(embeddedRelationType).getIdProperty();
+	private MetadataEmbddedRelation BuildMetadataEmbddedRelation(MongoPersistentProperty propertyEmbedded) {
+		MongoPersistentProperty embeddedPropertyEntityId = this.metadata.getMongoPersistentEntity(propertyEmbedded.getActualType()).getIdProperty();
 		
 		if (embeddedPropertyEntityId == null) {
 			throw new MongoExtensionPropertyIdNotFoundException();
