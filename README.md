@@ -8,3 +8,9 @@ SpringSecurity extension:
 SpringData extension:
 
 - Custom behavior for embedded documents using Spring Data Mongo repositories. More information: https://davidsuarez-architecture-development.blogspot.com.es/2016/05/custom-behavior-for-embedded-documents.html
+
+- Updating somes documents properties using optional in mongodb repository. 
+
+SpringDataRest extension:
+
+- All features of SpringData extension are availabe in Spring Data Rest
