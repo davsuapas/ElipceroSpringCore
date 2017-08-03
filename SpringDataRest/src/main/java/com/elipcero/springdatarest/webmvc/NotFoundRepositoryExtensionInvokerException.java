@@ -4,7 +4,7 @@ public class NotFoundRepositoryExtensionInvokerException extends RuntimeExceptio
 
 	private static final long serialVersionUID = 6589874818315638988L;
 	
-	public NotFoundRepositoryExtensionInvokerException() {
-		super("Not found repository extension");
+	public NotFoundRepositoryExtensionInvokerException(String invokerName) {
+		super("Not found repository extension: " + invokerName);
 	}
 }

@@ -22,7 +22,12 @@ public class RepositoryExtensionInvoker implements RepositoryInvoker {
 	public Object invokeUpdateNoNulls(Object object) {
 		return repository.updateNoNulls(object);
 	}
-
+	
+	public Boolean invokeExists(Object id) {
+		RepositoryExtensionMethodInvoker repositoryInvoker = (RepositoryExtensionMethodInvoker)repository;
+		return repositoryInvoker.exists(id);
+	}
+	
 	@Override
 	public boolean hasSaveMethod() {
 		return invoker.hasSaveMethod();

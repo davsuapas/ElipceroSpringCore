@@ -20,11 +20,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.elipcero.springdata.repositories.base.RepositoryExtensionInvoker;
+import com.elipcero.springdata.repositories.mongo.MongoRepositoryExtensionInvoker;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -44,15 +46,14 @@ public class RepositoryExtensionController {
 	private static final String ACCEPT_HEADER = "Accept";
 	
 	private @NonNull final HttpHeadersPreparer headersPreparer;
-
 	private @NonNull final RepositoryRestConfiguration config;
 
 	/**
 	 * Patch item for updatenonull from extension repository. Look {@link com.elipcero.springdata}
 	 *
 	 */
-	@RequestMapping(value = BASE_MAPPING + "/updatenonull/{id}", method = RequestMethod.PATCH)
-	public ResponseEntity<? extends ResourceSupport> patchItemResource(
+	@RequestMapping(value = BASE_MAPPING + "/{id}/updatenonull", method = RequestMethod.PATCH)
+	public ResponseEntity<? extends ResourceSupport> patchUpdateResource(
 			RootResourceInformation resourceInformation,
 			PersistentEntityResource payload,
 			@BackendId Serializable id,
@@ -70,7 +71,7 @@ public class RepositoryExtensionController {
 			invokerExtension = (RepositoryExtensionInvoker)invoker;
 		}
 		else {
-			throw new NotFoundRepositoryExtensionInvokerException();
+			throw new NotFoundRepositoryExtensionInvokerException(RepositoryExtensionInvoker.class.getName());
 		}
 		
 		Object objectToUpdate = payload.getContent();
@@ -87,5 +88,38 @@ public class RepositoryExtensionController {
 		} else {
 			return ControllerUtils.toEmptyResponse(HttpStatus.NO_CONTENT, headers);
 		}		
+	}
+	
+	/**
+	 * Patch item for mergeEmbedded from mongo extension repository. Look {@link com.elipcero.springdata}
+	 *
+	 */
+	@RequestMapping(value = BASE_MAPPING + "/{id}/mergeembedded/{embeddedProperty}", method = RequestMethod.PATCH)
+	public ResponseEntity<? extends ResourceSupport> patchMergeEmbeddedResource(
+			RootResourceInformation resourceInformation,
+			PersistentEntityResource payload,
+			@BackendId Serializable id,
+			ETag eTag,
+			@PathVariable String embeddedProperty) throws HttpRequestMethodNotSupportedException, ResourceNotFoundException {
+
+		resourceInformation.verifySupportedMethod(HttpMethod.PATCH, ResourceType.ITEM);
+		
+		RepositoryInvoker invoker = resourceInformation.getInvoker();
+		MongoRepositoryExtensionInvoker invokerExtension = null;
+		
+		if (invoker instanceof MongoRepositoryExtensionInvoker) {
+			invokerExtension = (MongoRepositoryExtensionInvoker)invoker;
+		}
+		else {
+			throw new NotFoundRepositoryExtensionInvokerException(MongoRepositoryExtensionInvoker.class.getName());
+		}
+		
+		Object objectToUpdate = payload.getContent();
+		
+		eTag.verify(resourceInformation.getPersistentEntity(), objectToUpdate);
+		
+		invokerExtension.invokeMergeEmbedded(objectToUpdate, embeddedProperty);
+		
+		return ControllerUtils.toEmptyResponse(HttpStatus.NO_CONTENT);
 	}
 }

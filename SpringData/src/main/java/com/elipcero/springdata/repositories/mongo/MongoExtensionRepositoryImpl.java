@@ -46,8 +46,8 @@ public class MongoExtensionRepositoryImpl<T, ID extends Serializable>
 	/* (non-Javadoc)
 	 * @see com.elipcero.springdata.repositories.mongo.MongoAllSharedRepository#mergeEmbeddedRelation(java.io.Serializable)
 	 */
-	public <TEmbedded> void mergeEmbeddedRelation(T entity, String propertyPath) {
-		
+	public void mergeEmbeddedRelation(T entity, String propertyPath) {
+	
 		MongoPersistentProperty propertyEmbedded =
 				this.metadata.getMappingContext().getPersistentPropertyPath(
 						propertyPath, this.entityInformation.getJavaType()).getBaseProperty();
@@ -55,27 +55,31 @@ public class MongoExtensionRepositoryImpl<T, ID extends Serializable>
 					
 		MetadataEmbddedRelation metadataEmbedded = this.BuildMetadataEmbddedRelation(propertyEmbedded);
 		
-		ID mainEntityId = this.entityInformation.getId(entity);
-		
-		Criteria criteriaId = where(this.entityInformation.getIdAttribute()).is(mainEntityId);
-		
-		for (Object reationItem : metadataEmbedded.getEmbeddedPropertyValue(entity)) {
-			
-			Criteria criteriaUpdate =
-					where(this.entityInformation.getIdAttribute()).is(mainEntityId)
-						.and(metadataEmbedded.getMetadataForId()).is(metadataEmbedded.getEmbeddedIdValue(reationItem));
+		Iterable<?> iterableEmbedded = metadataEmbedded.getEmbeddedPropertyValue(entity);
 
-			// the first update if exist. 
-			if (!this.mongoOperations.updateFirst(
-					new Query(criteriaUpdate),
-					new Update().set(metadataEmbedded.getMetadataForList(), (Object)reationItem),
-					this.entityInformation.getJavaType()).isUpdateOfExisting()) {
+		if (iterableEmbedded != null) {
+			ID mainEntityId = this.entityInformation.getId(entity);
 			
-				// if don't exist add
-				this.mongoOperations.updateFirst(
-						new Query(criteriaId),
-						new Update().addToSet(metadataEmbedded.getEmbeddedPropertyFieldName(), (Object)reationItem),
-						this.entityInformation.getJavaType());
+			Criteria criteriaId = where(this.entityInformation.getIdAttribute()).is(mainEntityId);
+			
+			for (Object reationItem : metadataEmbedded.getEmbeddedPropertyValue(entity)) {
+				
+				Criteria criteriaUpdate =
+						where(this.entityInformation.getIdAttribute()).is(mainEntityId)
+							.and(metadataEmbedded.getMetadataForId()).is(metadataEmbedded.getEmbeddedIdValue(reationItem));
+	
+				// the first update if exist. 
+				if (!this.mongoOperations.updateFirst(
+						new Query(criteriaUpdate),
+						new Update().set(metadataEmbedded.getMetadataForList(), (Object)reationItem),
+						this.entityInformation.getJavaType()).isUpdateOfExisting()) {
+				
+					// if don't exist add
+					this.mongoOperations.updateFirst(
+							new Query(criteriaId),
+							new Update().addToSet(metadataEmbedded.getEmbeddedPropertyFieldName(), (Object)reationItem),
+							this.entityInformation.getJavaType());
+				}
 			}
 		}
 	}
@@ -119,6 +123,15 @@ public class MongoExtensionRepositoryImpl<T, ID extends Serializable>
 		}
 		else 
 			return null;
+	}
+	
+	// I don't use exists method because using "exists" getting all fields of the document
+	// I use findone to get only the key information, in this way the query is more yield
+	public Boolean exists(Object id) {
+		Query query = new Query(where(entityInformation.getIdAttribute()).is(id));
+		query.fields().include(this.entityInformation.getIdAttribute());
+		
+		return this.mongoOperations.findOne(query, this.entityInformation.getJavaType()) != null;
 	}
 		
 	private MetadataEmbddedRelation BuildMetadataEmbddedRelation(MongoPersistentProperty propertyEmbedded) {

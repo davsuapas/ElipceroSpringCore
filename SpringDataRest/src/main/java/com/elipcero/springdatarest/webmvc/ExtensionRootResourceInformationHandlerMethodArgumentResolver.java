@@ -11,9 +11,11 @@ import org.springframework.data.rest.webmvc.config.RootResourceInformationHandle
 
 import com.elipcero.springdata.repositories.base.ExtensionRepository;
 import com.elipcero.springdata.repositories.base.RepositoryExtensionInvoker;
+import com.elipcero.springdata.repositories.mongo.MongoExtensionRepository;
+import com.elipcero.springdata.repositories.mongo.MongoRepositoryExtensionInvoker;
 
 /**
- * Override postProcess to allow a new invoker for repository extension getting more features
+ * Override postProcess to allow a new invoker for repository extension, getting more features
  * 
  * @author dav.sua.pas@gmail.com
  */
@@ -45,6 +47,12 @@ public class ExtensionRootResourceInformationHandlerMethodArgumentResolver exten
 	@Override
 	protected RepositoryInvoker postProcess(MethodParameter parameter, RepositoryInvoker invoker, Class<?> domainType, Map<String, String[]> parameters) {
 		Object repository = repositories.getRepositoryFor(domainType);
-		return new RepositoryExtensionInvoker(invoker, (ExtensionRepository<Object>)repository);
+		
+		if (repository instanceof MongoExtensionRepository<?, ?> )
+			return new MongoRepositoryExtensionInvoker(invoker, (MongoExtensionRepository<Object, ?>)repository);
+		else if (repository instanceof ExtensionRepository<?> )
+			return new RepositoryExtensionInvoker(invoker, (ExtensionRepository<Object>)repository);
+		else
+			return invoker; // By default
 	}	
 }

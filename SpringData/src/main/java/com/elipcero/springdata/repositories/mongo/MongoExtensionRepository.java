@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import com.elipcero.springdata.repositories.base.ExtensionRepository;
+import com.elipcero.springdata.repositories.base.RepositoryExtensionMethodInvoker;
 
 /**
  * @author dsuarez
@@ -15,7 +16,7 @@ import com.elipcero.springdata.repositories.base.ExtensionRepository;
  */
 
 @NoRepositoryBean
-public interface MongoExtensionRepository<T, ID extends Serializable> extends MongoRepository<T, ID>, ExtensionRepository<T> {
+public interface MongoExtensionRepository<T, ID extends Serializable> extends MongoRepository<T, ID>, ExtensionRepository<T>, RepositoryExtensionMethodInvoker {
   
   /**
    * Merge the items of the relation embedded. 
@@ -25,8 +26,7 @@ public interface MongoExtensionRepository<T, ID extends Serializable> extends Mo
    *
    * @param entity the main entity where is the embedded relation
    * @param propertyPath the relation embedded property name. This property must return a list
-   * @param embeddedRelationType the embedded property type.
    */
-	<TEmbedded> void mergeEmbeddedRelation(T entity, String propertyPath);
+	void mergeEmbeddedRelation(T entity, String propertyPath);
 }
 
