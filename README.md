@@ -13,4 +13,4 @@ SpringData extension:
 
 SpringDataRest extension:
 
-- All features of SpringData extension are availabe in Spring Data Rest
+- All features of SpringData extension are availabe in Spring Data Rest. More information: https://davidsuarez-architecture-development.blogspot.com.es/2017/08/with-my-obsession-for-reusing-all.html
