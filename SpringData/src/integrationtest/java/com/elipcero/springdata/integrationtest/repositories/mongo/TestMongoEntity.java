@@ -19,7 +19,7 @@ public class TestMongoEntity {
 	@Id
 	private String id;
 	
-	private Optional<String> name;
+	private String name;
 	
 	private Optional<Integer> number;
 	
@@ -34,7 +34,7 @@ public class TestMongoEntity {
 		return id;
 	}
 
-	public Optional<String> getName() {
+	public String getName() {
 		return name;
 	}
 
@@ -55,7 +55,7 @@ public class TestMongoEntity {
 			return this;
 		}
 		
-		public Builder withName(Optional<String> value) {
+		public Builder withName(String value) {
 			this.testMongoEntity.name = value;
 			return this;
 		}		
@@ -80,7 +80,7 @@ public class TestMongoEntity {
 		
 		return TestMongoEntity.getBuilder()
 					.withId(TestMongoEntity.TESTMONGO_ID)
-					.withName(Optional.of("name"))
+					.withName("name")
 					.withNumber(Optional.of(3))
 					.addEmbedded()
 						.withId(embeddedId)
@@ -93,7 +93,7 @@ public class TestMongoEntity {
 		
 		return TestMongoEntity.getBuilder()
 					.withId(TestMongoEntity.TESTMONGO_ID)
-					.withName(Optional.of("name"))
+					.withName("name")
 					.withNumber(Optional.of(3))
 					.build();
 	}
@@ -102,7 +102,7 @@ public class TestMongoEntity {
 		
 		return TestMongoEntity.getBuilder()
 					.withId(TestMongoEntity.TESTMONGO_ID)
-					.withName(Optional.of("name1"))
+					.withName("name1")
 					.withNumber(Optional.empty())
 					.build();
 	}

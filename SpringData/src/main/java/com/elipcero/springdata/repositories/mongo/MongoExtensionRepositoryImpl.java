@@ -97,10 +97,12 @@ public class MongoExtensionRepositoryImpl<T, ID extends Serializable>
 	
 		this.metadata.getMongoPersistentEntity(this.entityInformation.getJavaType()).doWithProperties(
 			(MongoPersistentProperty prop) -> {
-				if (prop.getType() == Optional.class) {
+				if (prop.getType() == Optional.class || prop.getType() == String.class) {
 					try {
-						Optional<?> value = (Optional<?>)prop.getGetter().invoke(entity);
-						if (value != null && value.isPresent()) {
+						Object value = prop.getGetter().invoke(entity);
+						if ( (value != null && prop.getType() == String.class) ||
+							( value != null && ((Optional<?>)value).isPresent()) ) {
+							
 							update.set(prop.getFieldName(), converts.convert(value, prop.getType()));
 							updateAnyField.setValue(true);
 						}

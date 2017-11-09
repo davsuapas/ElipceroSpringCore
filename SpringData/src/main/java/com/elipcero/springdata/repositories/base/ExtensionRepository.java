@@ -10,7 +10,7 @@ public interface ExtensionRepository<T> {
 
 	 /**
 	   * Update the properties not nulls of the entity.
-	   * The properties for researching must return an optional type
+	   * The properties for researching must return an optional type or string
 	   *
 	   * @param entity for updating
 	   */

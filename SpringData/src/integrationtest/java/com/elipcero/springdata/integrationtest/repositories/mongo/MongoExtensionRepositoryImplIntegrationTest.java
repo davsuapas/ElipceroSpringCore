@@ -38,7 +38,7 @@ public class MongoExtensionRepositoryImplIntegrationTest {
 		testMongoEntity = this.testMongoExtendedRepository.findOne(TestMongoEntity.TESTMONGO_ID);
 		
 		Assertions.assertThat(updated).isNotNull();
-		Assertions.assertThat(testMongoEntity.getName().get()).isEqualTo("name1");
+		Assertions.assertThat(testMongoEntity.getName()).isEqualTo("name1");
 		Assertions.assertThat(testMongoEntity.getNumber().get()).isEqualTo(3);
 		
 		this.deleteSample();
