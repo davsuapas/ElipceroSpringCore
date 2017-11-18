@@ -98,9 +98,9 @@ public abstract class OAuth2SsoConfigurerAdapter extends WebSecurityConfigurerAd
 		OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(path);
 		OAuth2RestTemplate template = new OAuth2RestTemplate(client.getClient(), oauth2ClientContext);
 		filter.setRestTemplate(template);
-		filter.setTokenServices(new UserInfoTokenServices(
-				client.getResource().getUserInfoUri(), client.getClient().getClientId()));
-		
+		UserInfoTokenServices tokenServices = new UserInfoTokenServices(client.getResource().getUserInfoUri(), client.getClient().getClientId());
+		tokenServices.setRestTemplate(template);
+		filter.setTokenServices(tokenServices);
 		return filter;
 	}	
 }

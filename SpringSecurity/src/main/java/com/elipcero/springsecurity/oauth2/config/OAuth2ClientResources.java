@@ -1,7 +1,7 @@
 package com.elipcero.springsecurity.oauth2.config;
 
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
-import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 
 /**
@@ -20,10 +20,13 @@ import org.springframework.security.oauth2.client.token.grant.code.Authorization
  */
 public class OAuth2ClientResources {
 	
-	private OAuth2ProtectedResourceDetails client = new AuthorizationCodeResourceDetails();
+	@NestedConfigurationProperty
+	private AuthorizationCodeResourceDetails client = new AuthorizationCodeResourceDetails();
+	
+	@NestedConfigurationProperty
 	private ResourceServerProperties resource = new ResourceServerProperties();
 
-	public OAuth2ProtectedResourceDetails getClient() {
+	public AuthorizationCodeResourceDetails getClient() {
 		return client;
 	}
 

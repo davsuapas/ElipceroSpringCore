@@ -31,27 +31,23 @@ subprojects {
 	    providedRuntuildime
 	}
 	
-	// Integracion test 
+	// Integracion test
 	
 	sourceSets {
 	    integrationTest {
-	        java {
-	        	srcDir 'src/integrationtest/java'
-	        }
+	        java.srcDir file('src/integrationtest/java')
+	        resources.srcDir file('src/integrationtest/resources')
+	        compileClasspath += sourceSets.main.output + configurations.testRuntime
+	        runtimeClasspath += output + compileClasspath
 	    }
 	}
-	
-	dependencies {
-		integrationTestCompile sourceSets.main.output
-		integrationTestCompile sourceSets.test.output
-		integrationTestCompile configurations.testCompile
-		integrationTestRuntime configurations.testRuntime
-	}
-	
+
 	task integrationTest(type: Test) {
-	    testClassesDir = sourceSets.integrationTest.output.classesDir
-	    classpath = sourceSets.integrationTest.runtimeClasspath
-	}
+  		description = 'Runs the integration tests.'
+    	group = 'verification'
+    	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    	classpath = sourceSets.integrationTest.runtimeClasspath
+    }
 	
 	check.dependsOn integrationTest
 	
