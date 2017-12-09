@@ -11,10 +11,19 @@
 .classpath
 .project
 
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
 # Gradle files #
 .gradle
+gradle
 build
 
 target
+out
 logs
 data
+/bin/

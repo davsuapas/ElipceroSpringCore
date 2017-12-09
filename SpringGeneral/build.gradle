@@ -1,0 +1,18 @@
+jar {
+    baseName = 'elipcero-springgeneral'
+    version = '0.1.0'
+}
+
+dependencies {
+	compile('javax.validation:validation-api')
+}
+
+// Publish maven local
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId 'com.elipcero.springgeneral'
+        }
+    }
+}

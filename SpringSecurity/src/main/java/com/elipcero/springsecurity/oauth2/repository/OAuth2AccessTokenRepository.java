@@ -1,8 +1,8 @@
 package com.elipcero.springsecurity.oauth2.repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-
 import com.elipcero.springsecurity.oauth2.OAuth2AuthenticationAccessToken;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
@@ -11,6 +11,7 @@ import java.util.List;
  * 
  *  @author David Suárez Pascual
  */
+@RepositoryRestResource(exported = false)
 public interface OAuth2AccessTokenRepository extends MongoRepository<OAuth2AuthenticationAccessToken, String> {
 
     /**
@@ -19,7 +20,7 @@ public interface OAuth2AccessTokenRepository extends MongoRepository<OAuth2Authe
      * @param tokenId the token id
      * @return the authentication access token
      */
-    public OAuth2AuthenticationAccessToken findByTokenId(String tokenId);
+    OAuth2AuthenticationAccessToken findByTokenId(String tokenId);
 
     /**
      * Find by refresh token id.
@@ -27,7 +28,7 @@ public interface OAuth2AccessTokenRepository extends MongoRepository<OAuth2Authe
      * @param refreshToken the refresh token id
      * @return the authentication access token
      */
-    public OAuth2AuthenticationAccessToken findByRefreshTokenId(String refreshToken);
+    OAuth2AuthenticationAccessToken findByRefreshTokenId(String refreshToken);
 
     /**
      * Find by authentication id.
@@ -35,7 +36,7 @@ public interface OAuth2AccessTokenRepository extends MongoRepository<OAuth2Authe
      * @param authenticationId the authentication id
      * @return the authentication access token
      */
-    public OAuth2AuthenticationAccessToken findByAuthenticationId(String authenticationId);
+    OAuth2AuthenticationAccessToken findByAuthenticationId(String authenticationId);
 
     /**
      * Find by client id and user name.
@@ -44,7 +45,7 @@ public interface OAuth2AccessTokenRepository extends MongoRepository<OAuth2Authe
      * @param userName the user name
      * @return the list all token by client id and user name
      */
-    public List<OAuth2AuthenticationAccessToken> findByClientIdAndUserName(String clientId, String userName);
+    List<OAuth2AuthenticationAccessToken> findByClientIdAndUserName(String clientId, String userName);
 
     /**
      * Find by client id.
@@ -52,5 +53,5 @@ public interface OAuth2AccessTokenRepository extends MongoRepository<OAuth2Authe
      * @param clientId the client id
      * @return the list all token by client
      */
-    public List<OAuth2AuthenticationAccessToken> findByClientId(String clientId);
+    List<OAuth2AuthenticationAccessToken> findByClientId(String clientId);
 }
